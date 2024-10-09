@@ -1,8 +1,8 @@
 import { Tabs } from 'expo-router';
 
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/theme';
-import { CircleUserRound, House } from '@/theme/icons';
+import { Colors } from '@constants';
+import { useColorScheme } from '@theme';
+import { CircleUserRound, House } from '@icons';
 
 export default function TabLayout() {
     const { colorScheme } = useColorScheme();

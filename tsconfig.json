@@ -3,7 +3,13 @@
     "compilerOptions": {
         "strict": true,
         "paths": {
-            "@/*": ["./*"]
+            "@/*": ["./src/*"],
+            "@assets": ["./src/assets"],
+            "@components": ["./src/components"],
+            "@constants": ["./src/constants"],
+            "@hooks": ["./src/hooks"],
+            "@theme": ["./src/theme"],
+            "@icons": ["./src/theme/icons"]
         },
         "jsx": "react-jsx"
     },

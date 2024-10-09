@@ -1,5 +1,5 @@
 import '@/global.css';
-import { NAV_THEME, useColorScheme } from '@/theme';
+import { NAV_THEME, useColorScheme } from '@theme';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Theme, ThemeProvider } from '@react-navigation/native';
