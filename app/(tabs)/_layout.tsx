@@ -1,12 +1,11 @@
 import { Tabs } from 'expo-router';
-import React from 'react';
 
-import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { useColorScheme } from '@/theme';
+import { CircleUserRound, House } from '@/theme/icons';
 
 export default function TabLayout() {
-    const colorScheme = useColorScheme();
+    const { colorScheme } = useColorScheme();
 
     return (
         <Tabs
@@ -19,18 +18,14 @@ export default function TabLayout() {
                 name="index"
                 options={{
                     title: 'Home',
-                    tabBarIcon: ({ color, focused }) => (
-                        <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
-                    ),
+                    tabBarIcon: ({ color }) => <House color={color} />,
                 }}
             />
             <Tabs.Screen
                 name="explore"
                 options={{
                     title: 'Explore',
-                    tabBarIcon: ({ color, focused }) => (
-                        <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
-                    ),
+                    tabBarIcon: ({ color }) => <CircleUserRound color={color} />,
                 }}
             />
         </Tabs>
