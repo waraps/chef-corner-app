@@ -8,6 +8,7 @@ import { SplashScreen, Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { Platform } from 'react-native';
+import { SessionProvider } from '@/contexts';
 
 const LIGHT_THEME: Theme = {
     dark: false,
@@ -68,8 +69,10 @@ export default function RootLayout() {
 
     return (
         <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
-            <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
-            <Stack />
+            <SessionProvider>
+                <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
+                <Stack screenOptions={{ headerShown: false }} />
+            </SessionProvider>
         </ThemeProvider>
     );
 }
