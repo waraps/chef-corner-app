@@ -1,18 +1,16 @@
-import { Text, View } from 'react-native';
-import { Href, Redirect, Stack } from 'expo-router';
+import { SafeAreaView } from 'react-native';
+import { Redirect, Stack } from 'expo-router';
 
 import { useSession } from '@/contexts';
+
+import { AuthLoading } from '@/components';
 
 export default function AppLayout() {
     const { session } = useSession();
 
     // You can keep the splash screen open, or render a loading screen like we do here.
     if (session?.loading) {
-        return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Text>Loading...</Text>
-            </View>
-        );
+        return <AuthLoading />;
     }
 
     // Only require authentication within the (app) group's layout as users
@@ -20,9 +18,13 @@ export default function AppLayout() {
     if (!session.session) {
         // On web, static rendering will stop here as the user is not authenticated
         // in the headless Node process that the pages are rendered in.
-        return <Redirect href={'/signin' as Href} />;
+        return <Redirect href={'/landing'} />;
     }
 
     // This layout can be deferred because it's not the root layout.
-    return <Stack screenOptions={{ headerShown: false }} />;
+    return (
+        <SafeAreaView className="flex-1">
+            <Stack screenOptions={{ headerShown: false }} />
+        </SafeAreaView>
+    );
 }

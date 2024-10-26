@@ -4,3 +4,4 @@ export * from './ParallaxScrollView';
 export * from './ThemedText';
 export * from './ThemedView';
 export * from './Collapsible';
+export * from './auth-loading';

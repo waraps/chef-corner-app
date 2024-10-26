@@ -2,6 +2,7 @@ import React, { useContext, createContext, type PropsWithChildren, useState, use
 import * as SecureStore from 'expo-secure-store';
 import { timeout } from '../utils';
 import { IAuthContext, ISession, ISessionState, IUser } from '@/interfaces';
+import { signinSchemaType } from '@/schemes';
 
 const initialSession: ISessionState = {
     session: undefined,
@@ -44,9 +45,10 @@ export function SessionProvider({ children }: PropsWithChildren) {
         });
     };
 
-    const signIn = async () => {
+    const signIn = async (auth: signinSchemaType) => {
         try {
             setSession({ ...session, loading: true });
+            console.log('auth: ', auth);
             await timeout(1000);
             const user: IUser = { name: 'John Doe' };
             const token: string = 'super-secret-token';

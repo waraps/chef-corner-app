@@ -71,7 +71,7 @@ export default function RootLayout() {
         <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
             <SessionProvider>
                 <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
-                <Stack screenOptions={{ headerShown: false }} />
+                <Stack screenOptions={{ headerShown: false, headerBackTitleVisible: false, title: '' }} />
             </SessionProvider>
         </ThemeProvider>
     );
