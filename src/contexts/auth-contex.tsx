@@ -1,7 +1,7 @@
 import { useContext, createContext, type PropsWithChildren, useState, useEffect } from 'react';
 import { IAuthContext, IError, ISessionState, ISigninReq, ISignupReq } from '@/interfaces';
 import { getSession, removeSession, storeSession } from '@/lib';
-import { perfomSignIn, perfomSignUp /* , perfomSignOut */ } from '@/services';
+import { perfomSignIn, perfomSignUp, perfomSignOut } from '@/services';
 
 const initialSession: ISessionState = {
     session: undefined,
@@ -72,16 +72,16 @@ export function SessionProvider({ children }: PropsWithChildren) {
         }
     };
 
-    const signOut = () => {
+    const signOut = async () => {
         try {
             setUserSession({ ...userSession, loading: true });
-            // perfomSignOut();
+            await perfomSignOut();
             setUserSession({ loading: false });
+            removeSession();
         } catch (error) {
             if (error) {
                 setUserSession({ loading: false, error: true });
             }
-        } finally {
             removeSession();
         }
     };

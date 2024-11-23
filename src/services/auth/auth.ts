@@ -11,5 +11,5 @@ export const perfomSignUp = async (user: ISignupReq): Promise<AxiosResponse<ISes
 };
 
 export const perfomSignOut = async (): Promise<AxiosResponse<void>> => {
-    return API.get<void>('/auth/logout');
+    return API.post<void>('/auth/logout', {});
 };
