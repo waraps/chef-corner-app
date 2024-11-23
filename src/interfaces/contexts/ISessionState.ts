@@ -1,4 +1,4 @@
-import { ISession } from '../generics';
+import { ISession } from '../res';
 
 export interface ISessionState {
     session?: ISession;

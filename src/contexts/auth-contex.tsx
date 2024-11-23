@@ -1,8 +1,8 @@
-import React, { useContext, createContext, type PropsWithChildren, useState, useEffect } from 'react';
-import * as SecureStore from 'expo-secure-store';
-import { timeout } from '../utils';
-import { IAuthContext, ISession, ISessionState, IUser } from '@/interfaces';
-import { signinSchemaType } from '@/schemes';
+import { useContext, createContext, type PropsWithChildren, useState, useEffect } from 'react';
+import { IAuthContext, IError, ISessionState, ISigninReq, ISignupReq } from '@/interfaces';
+import { getSession, removeSession, storeSession } from '@/lib';
+import { perfomSignIn, perfomSignUp /* , perfomSignOut */ } from '@/services';
+import { NetworkLoggerComponent } from '@/components';
 
 const initialSession: ISessionState = {
     session: undefined,
@@ -10,7 +10,7 @@ const initialSession: ISessionState = {
     error: undefined,
 };
 
-const AuthContext = createContext<IAuthContext>({ session: initialSession });
+const AuthContext = createContext<IAuthContext | null>(null);
 
 // This hook can be used to access the user info.
 export function useSession() {
@@ -25,56 +25,74 @@ export function useSession() {
 }
 
 export function SessionProvider({ children }: PropsWithChildren) {
-    const [session, setSession] = useState<ISessionState>(initialSession);
+    const [userSession, setUserSession] = useState<ISessionState>(initialSession);
 
     useEffect(() => {
-        if (!session) {
+        if (!userSession?.session) {
             checkSession();
         }
     }, []);
 
     const checkSession = async () => {
-        setSession({ ...session, loading: true });
-        await SecureStore.getItemAsync('session').then((value) => {
-            if (value) {
-                const userSession: ISession = JSON.parse(value);
-                if (userSession?.user && userSession?.token) {
-                    setSession({ ...session, session: userSession });
-                }
-            }
-        });
-    };
-
-    const signIn = async (auth: signinSchemaType) => {
-        try {
-            setSession({ ...session, loading: true });
-            console.log('auth: ', auth);
-            await timeout(1000);
-            const user: IUser = { name: 'John Doe' };
-            const token: string = 'super-secret-token';
-            const userSession: ISession = { user, token };
-            await SecureStore.setItemAsync('session', JSON.stringify(userSession));
-            setSession({ ...session, session: userSession, loading: false });
-        } catch (error) {
-            if (error) {
-                setSession({ ...session, loading: false, error: true });
-            }
+        setUserSession({ ...userSession, loading: true });
+        const session = await getSession();
+        if (session) {
+            setUserSession({ ...userSession, session, loading: false });
+        } else {
+            setUserSession({ ...userSession, loading: false });
         }
     };
 
-    const signOut = async () => {
+    const signIn = async (credentials: ISigninReq) => {
         try {
-            setSession({ ...session, loading: true });
-            await timeout(1000);
-            await SecureStore.deleteItemAsync('session');
-            setSession({ loading: false });
+            setUserSession({ ...userSession, loading: true });
+            const { data: session } = await perfomSignIn(credentials);
+            await storeSession(session);
+            setUserSession({ ...userSession, session, loading: false });
         } catch (error) {
-            await SecureStore.deleteItemAsync('session');
-            if (error) {
-                setSession({ loading: false, error: true });
+            const errorResponse = error as IError;
+            if (errorResponse?.message === 'Invalid username or password') {
+                console.log(errorResponse?.message);
             }
+
+            setUserSession({ ...userSession, loading: false, error: true });
         }
     };
 
-    return <AuthContext.Provider value={{ session, signIn, signOut }}>{children}</AuthContext.Provider>;
+    const signUp = async (user: ISignupReq) => {
+        try {
+            setUserSession({ ...userSession, loading: true });
+            const { data: session } = await perfomSignUp(user);
+            await storeSession(session);
+            setUserSession({ ...userSession, session, loading: false });
+        } catch (error) {
+            const errorResponse = error as IError;
+            console.log(errorResponse?.message);
+
+            setUserSession({ ...userSession, loading: false, error: true });
+        }
+    };
+
+    const signOut = () => {
+        try {
+            setUserSession({ ...userSession, loading: true });
+            // perfomSignOut();
+            setUserSession({ loading: false });
+        } catch (error) {
+            if (error) {
+                setUserSession({ loading: false, error: true });
+            }
+        } finally {
+            removeSession();
+        }
+    };
+
+    return (
+        <AuthContext.Provider value={{ session: userSession, signIn, signUp, signOut }}>
+            <>
+                <NetworkLoggerComponent />
+                {children}
+            </>
+        </AuthContext.Provider>
+    );
 }

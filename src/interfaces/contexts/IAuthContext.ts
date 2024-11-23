@@ -1,8 +1,9 @@
-import { signinSchemaType } from '@/schemes';
 import { ISessionState } from './ISessionState';
+import { ISigninReq, ISignupReq } from '../req';
 
 export interface IAuthContext {
     session: ISessionState;
-    signIn?: (auth: signinSchemaType) => void;
-    signOut?: () => void;
+    signIn: (auth: ISigninReq) => void;
+    signUp: (user: ISignupReq) => void;
+    signOut: () => void;
 }

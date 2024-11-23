@@ -1,4 +1,4 @@
-import { Link, router } from 'expo-router';
+import { Href, Link, router } from 'expo-router';
 import { Image, SafeAreaView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -11,7 +11,7 @@ import { useState } from 'react';
 import { signinSchema, signinSchemaType } from '@/schemes';
 
 export default function SignInScreen() {
-    const { signIn } = useSession();
+    const auth = useSession();
     const [hidePassword, setHidePassword] = useState(true);
 
     const {
@@ -36,11 +36,9 @@ export default function SignInScreen() {
     };
 
     const onSubmit = (schema: signinSchemaType): void => {
-        if (signIn) {
-            signIn(schema);
-            // Navigate after signing in. You may want to tweak this to ensure sign-in is
-            // successful before navigating.
-            router.replace('/');
+        if (auth?.signIn) {
+            auth?.signIn(schema);
+            router.replace('/' as Href);
         }
     };
 
@@ -74,10 +72,11 @@ export default function SignInScreen() {
                                     placeholder="johndoe1"
                                     cursorColor={'#ea580c'}
                                     placeholderTextColor={'#9ca3af'}
+                                    autoCapitalize="none"
                                 />
                             )}
                         />
-                        {errors.username ? (
+                        {errors?.username ? (
                             <Text className="text-orange-800 mt-0.5 ml-2">{errors.username?.message}</Text>
                         ) : undefined}
                     </View>
@@ -96,7 +95,7 @@ export default function SignInScreen() {
                                         placeholderTextColor={'#9ca3af'}
                                         secureTextEntry={hidePassword}
                                     />
-                                    {value.length ? (
+                                    {value?.length ? (
                                         <TouchableOpacity onPress={togglePasswordVisibility} disabled={!value.length}>
                                             {hidePassword ? <EyeOff color={'#ea580c'} /> : <Eye color={'#ea580c'} />}
                                         </TouchableOpacity>
@@ -104,7 +103,7 @@ export default function SignInScreen() {
                                 </View>
                             )}
                         />
-                        {errors.password ? (
+                        {errors?.password ? (
                             <Text className="text-orange-800 mt-0.5 ml-2">{errors.password?.message}</Text>
                         ) : undefined}
                     </View>

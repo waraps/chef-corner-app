@@ -1,23 +1,13 @@
 import '@/global.css';
-import { NAV_THEME, useColorScheme } from '@theme';
+import { useColorScheme } from '@theme';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Theme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { Platform } from 'react-native';
 import { SessionProvider } from '@/contexts';
-
-const LIGHT_THEME: Theme = {
-    dark: false,
-    colors: NAV_THEME.light,
-};
-const DARK_THEME: Theme = {
-    dark: true,
-    colors: NAV_THEME.dark,
-};
 
 export {
     // Catch any errors thrown by the Layout component.
@@ -68,11 +58,9 @@ export default function RootLayout() {
     }
 
     return (
-        <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
-            <SessionProvider>
-                <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
-                <Stack screenOptions={{ headerShown: false, headerBackTitleVisible: false, title: '' }} />
-            </SessionProvider>
-        </ThemeProvider>
+        <SessionProvider>
+            <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
+            <Stack screenOptions={{ headerShown: false, title: '' }} />
+        </SessionProvider>
     );
 }
