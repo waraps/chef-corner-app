@@ -2,7 +2,6 @@ import { useContext, createContext, type PropsWithChildren, useState, useEffect 
 import { IAuthContext, IError, ISessionState, ISigninReq, ISignupReq } from '@/interfaces';
 import { getSession, removeSession, storeSession } from '@/lib';
 import { perfomSignIn, perfomSignUp /* , perfomSignOut */ } from '@/services';
-import { NetworkLoggerComponent } from '@/components';
 
 const initialSession: ISessionState = {
     session: undefined,
@@ -89,10 +88,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
 
     return (
         <AuthContext.Provider value={{ session: userSession, signIn, signUp, signOut }}>
-            <>
-                <NetworkLoggerComponent />
-                {children}
-            </>
+            {children}
         </AuthContext.Provider>
     );
 }

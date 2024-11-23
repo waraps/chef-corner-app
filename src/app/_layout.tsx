@@ -8,6 +8,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { Platform } from 'react-native';
 import { SessionProvider } from '@/contexts';
+import { NetworkLoggerComponent } from '@/components';
 
 export {
     // Catch any errors thrown by the Layout component.
@@ -60,6 +61,7 @@ export default function RootLayout() {
     return (
         <SessionProvider>
             <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
+            <NetworkLoggerComponent />
             <Stack screenOptions={{ headerShown: false, title: '' }} />
         </SessionProvider>
     );
