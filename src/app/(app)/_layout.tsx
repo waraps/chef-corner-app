@@ -1,4 +1,3 @@
-import { SafeAreaView } from 'react-native';
 import { Redirect, Stack } from 'expo-router';
 
 import { useSession } from '@/contexts';
@@ -7,6 +6,8 @@ import { AuthLoading } from '@/components';
 
 export default function AppLayout() {
     const userSession = useSession();
+
+    console.log(userSession?.session);
 
     // You can keep the splash screen open, or render a loading screen like we do here.
     if (userSession?.session?.loading) {
@@ -22,9 +23,5 @@ export default function AppLayout() {
     }
 
     // This layout can be deferred because it's not the root layout.
-    return (
-        <SafeAreaView className="flex-1">
-            <Stack screenOptions={{ headerShown: false }} />
-        </SafeAreaView>
-    );
+    return <Stack screenOptions={{ headerShown: false }} />;
 }
