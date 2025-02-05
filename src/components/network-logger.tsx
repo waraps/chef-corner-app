@@ -12,7 +12,7 @@ export const NetworkLoggerComponent = () => {
 
     return (
         <SafeAreaView className="absolute z-10 right-0" edges={['top']}>
-            <TouchableOpacity onPress={toggleNetworkLogger} className="self-end mr-4 mt-3.5">
+            <TouchableOpacity onPress={toggleNetworkLogger} className="self-end mr-4 mt-2">
                 <Text className="text-lg">🌐</Text>
             </TouchableOpacity>
 
@@ -23,7 +23,7 @@ export const NetworkLoggerComponent = () => {
                         height: windowHeight,
                     }}
                 >
-                    <NetworkLogger theme="dark" compact={true} />
+                    <NetworkLogger theme="dark" />
                 </View>
             ) : undefined}
         </SafeAreaView>

@@ -4,7 +4,6 @@ import { useColorScheme } from '@theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { Platform } from 'react-native';
 import { SessionProvider } from '@/contexts';
@@ -19,7 +18,7 @@ export {
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-    const { colorScheme, setColorScheme, isDarkColorScheme } = useColorScheme();
+    const { colorScheme, setColorScheme } = useColorScheme();
     const [loaded] = useFonts({
         SpaceMono: require('../theme/fonts/SpaceMono-Regular.ttf'),
     });
@@ -60,8 +59,7 @@ export default function RootLayout() {
 
     return (
         <SessionProvider>
-            <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
-            <NetworkLoggerComponent />
+            {process.env.EXPO_PUBLIC_ENV === 'DEV' ? <NetworkLoggerComponent /> : undefined}
             <Stack screenOptions={{ headerShown: false, title: '' }} />
         </SessionProvider>
     );
