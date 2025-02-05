@@ -1,3 +1,5 @@
+import { IRole } from './IRole';
+
 export interface IUser {
     id: number;
     name: string;
@@ -5,4 +7,6 @@ export interface IUser {
     email: string;
     username: string;
     enabled: boolean;
+    roles: IRole[];
+    admin: boolean;
 }
